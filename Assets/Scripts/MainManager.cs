@@ -10,6 +10,8 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
+    public MainUIHandler mainUIHandler;
+
     public Text ScoreText;
     public GameObject GameOverText;
     
@@ -22,6 +24,8 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        mainUIHandler.UpdateBestScore();
+
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -70,6 +74,13 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (m_Points > DataHandler.instance.bestScore)
+        {
+            DataHandler.instance.bestScore = m_Points;
+            DataHandler.instance.fromUser = DataHandler.instance.currentUser;
+            DataHandler.instance.SaveScore();
+        }
+
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
